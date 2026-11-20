@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Bin · Đàm thoại</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,15 +16,18 @@
     --ink-dim: #a39c8c;
     --ink-faint: #6f6a5c;
     --accent: #7aa08f;
+    --accent-bright: #a9ccbb;
     --accent-dim: #4b6459;
     --accent-soft: #2a332e;
     --line: #322e27;
     --user-bubble: #2c4238;
     --agent-bubble: #241f1a;
+    --danger: #d97a6f;
     --radius: 14px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  *{ box-sizing: border-box; }
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body{ height: 100%; margin: 0; overscroll-behavior: none; }
   body{
     font-family: 'IBM Plex Sans', -apple-system, sans-serif;
@@ -55,43 +58,28 @@
     flex-direction: column;
     min-width: 0;
   }
-  .sidebar-header{
-    padding: 20px 18px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .sidebar-header{ padding: 20px 18px 14px; display: flex; align-items: center; gap: 10px; }
   .mark{
     width: 30px; height: 30px;
     border-radius: 9px;
     background: linear-gradient(155deg, var(--accent) 0%, var(--accent-dim) 100%);
     flex-shrink: 0;
-    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    color: #14201b;
     box-shadow: 0 0 18px rgba(122, 160, 143, 0.18);
   }
-  .mark::after{
-    content: "";
-    position: absolute;
-    inset: 9px;
-    border-radius: 50%;
-    background: var(--bg-sidebar);
-    opacity: .2;
-  }
-  .brand{
-    font-family: 'Fraunces', serif;
-    font-size: 19px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
+  .mark .bin-glyph{ width: 20px; height: 20px; }
+  .brand{ font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
   .status-badge{
     margin-left: auto;
     width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--ink-faint);
     flex-shrink: 0;
+    transition: background .3s ease, box-shadow .3s ease;
   }
   .status-badge.online{ background: var(--accent); box-shadow: 0 0 8px rgba(122,160,143,.5); }
-  .status-badge.offline{ background: #d97a6f; }
+  .status-badge.offline{ background: var(--danger); }
 
   .new-chat-btn{
     margin: 4px 14px 10px;
@@ -104,13 +92,11 @@
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
     transition: background .15s ease, border-color .15s ease, transform .1s ease;
   }
   .new-chat-btn:hover{ background: var(--accent-dim); border-color: var(--accent); }
-  .new-chat-btn:active{ transform: scale(0.99); }
+  .new-chat-btn:active{ transform: scale(0.98); }
 
   .settings-btn{
     margin: 0 14px 12px;
@@ -122,31 +108,14 @@
     font-family: inherit;
     font-size: 12.5px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
     transition: border-color .15s ease, color .15s ease;
   }
   .settings-btn:hover{ border-color: var(--accent-dim); color: var(--ink); }
 
-  .mode-box{
-    margin: 0 14px 14px;
-    padding: 10px;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 11px;
-  }
-  .mode-box-title{
-    font-size: 11px;
-    color: var(--ink-faint);
-    margin-bottom: 8px;
-    letter-spacing: 0.02em;
-  }
-  .mode-pills{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-  }
+  .mode-box{ margin: 0 14px 14px; padding: 10px; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 11px; }
+  .mode-box-title{ font-size: 11px; color: var(--ink-faint); margin-bottom: 8px; letter-spacing: 0.02em; }
+  .mode-pills{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
   .mode-pill{
     padding: 6px 4px;
     border-radius: 8px;
@@ -161,39 +130,20 @@
     text-align: center;
   }
   .mode-pill:hover{ color: var(--ink); border-color: var(--accent-dim); }
-  .mode-pill.active{
-    background: var(--accent-soft);
-    border-color: var(--accent);
-    color: var(--ink);
-  }
-  .mode-desc{
-    margin-top: 7px;
-    font-size: 11.5px;
-    color: var(--ink-dim);
-    line-height: 1.4;
-  }
+  .mode-pill.active{ background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+  .mode-desc{ margin-top: 7px; font-size: 11.5px; color: var(--ink-dim); line-height: 1.4; }
 
-  .history-label{
-    padding: 4px 18px 8px;
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    color: var(--ink-faint);
-  }
+  .history-label{ padding: 4px 18px 8px; font-size: 11px; letter-spacing: 0.03em; color: var(--ink-faint); }
   .history{
-    flex: 1;
-    min-height: 0;
+    flex: 1; min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding: 0 10px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    display: flex; flex-direction: column; gap: 2px;
   }
   .history-item{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: flex; align-items: center; gap: 10px;
     padding: 9px 10px;
     border-radius: 9px;
     cursor: pointer;
@@ -206,248 +156,216 @@
   .history-item.active{ background: var(--accent-soft); color: var(--ink); border-color: var(--line); }
   .history-item .title{ flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .history-item .delete-btn{
-    opacity: 0;
-    background: none;
-    border: none;
-    color: var(--ink-faint);
-    cursor: pointer;
-    padding: 3px;
-    border-radius: 5px;
-    display: flex;
-    flex-shrink: 0;
+    opacity: 0; background: none; border: none; color: var(--ink-faint);
+    cursor: pointer; padding: 3px; border-radius: 5px; display: flex; flex-shrink: 0;
   }
   .history-item:hover .delete-btn{ opacity: 1; }
-  .history-item .delete-btn:hover{ color: #d97a6f; background: rgba(217,122,111,0.12); }
+  @media (hover: none){ .history-item .delete-btn{ opacity: .7; } }
+  .history-item .delete-btn:hover{ color: var(--danger); background: rgba(217,122,111,0.12); }
   .empty-history{ padding: 20px 14px; color: var(--ink-faint); font-size: 13px; line-height: 1.6; }
 
   .sidebar-footer{
     padding: 12px 18px;
     border-top: 1px solid var(--line);
-    font-size: 12px;
-    color: var(--ink-faint);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 12px; color: var(--ink-faint);
+    display: flex; align-items: center; gap: 8px;
   }
   .dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-  .dot.offline{ background: #d97a6f; }
+  .dot.offline{ background: var(--danger); }
 
   /* ----- Main chat ----- */
-  .main{
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 0;
-    background: var(--bg);
-  }
+  .main{ display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--bg); }
   .chat-topbar{
     padding: 15px 32px;
     border-bottom: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-  .chat-title{
-    font-family: 'Fraunces', serif;
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-  .chat-subtitle{
-    font-size: 12.5px;
-    color: var(--ink-faint);
-    margin-top: 2px;
-  }
+  .chat-title{ font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; color: var(--ink); }
+  .chat-subtitle{ font-size: 12.5px; color: var(--ink-faint); margin-top: 2px; }
   .topbar-mode-pill{
-    padding: 5px 11px;
-    border-radius: 999px;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    color: var(--ink-dim);
-    font-size: 12px;
-    white-space: nowrap;
+    padding: 5px 11px; border-radius: 999px;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    color: var(--ink-dim); font-size: 12px; white-space: nowrap;
   }
 
   .messages{
-    flex: 1;
-    min-height: 0;
+    flex: 1; min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding: 28px 0 20px;
   }
   .messages-inner{
-    max-width: 740px;
-    margin: 0 auto;
-    padding: 0 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+    max-width: 740px; margin: 0 auto; padding: 0 32px;
+    display: flex; flex-direction: column; gap: 22px;
   }
 
-  @keyframes msgAppear{
-    from{ opacity: 0; transform: translateY(8px); }
-    to{ opacity: 1; transform: translateY(0); }
-  }
-  .msg-row{
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    animation: msgAppear .24s cubic-bezier(0.22, 1, 0.36, 1);
-  }
+  @keyframes msgAppear{ from{ opacity: 0; transform: translateY(8px); } to{ opacity: 1; transform: translateY(0); } }
+  .msg-row{ display: flex; gap: 12px; align-items: flex-start; animation: msgAppear .28s var(--ease); }
   .msg-row.user{ flex-direction: row-reverse; }
 
-  .welcome{
-    max-width: 740px;
-    margin: 0 auto;
-    padding: 52px 32px;
-    animation: msgAppear .3s ease;
-  }
-  .welcome h1{
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-size: 32px;
-    line-height: 1.2;
-    margin: 0 0 10px;
-    color: var(--ink);
-  }
-  .welcome p{
-    color: var(--ink-dim);
-    font-size: 14.5px;
-    line-height: 1.6;
-    max-width: 520px;
-    margin: 0 0 22px;
-  }
+  .welcome{ max-width: 740px; margin: 0 auto; padding: 52px 32px; animation: msgAppear .35s ease; }
+  .welcome h1{ font-family: 'Fraunces', serif; font-weight: 500; font-size: 32px; line-height: 1.2; margin: 0 0 10px; }
+  .welcome p{ color: var(--ink-dim); font-size: 14.5px; line-height: 1.6; max-width: 520px; margin: 0 0 22px; }
   .prompt-chips{ display: flex; flex-wrap: wrap; gap: 8px; }
   .chip{
     padding: 9px 14px;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    font-size: 13px;
-    color: var(--ink-dim);
+    background: var(--bg-raised); border: 1px solid var(--line);
+    border-radius: 10px; font-size: 13px; color: var(--ink-dim);
     cursor: pointer;
     transition: border-color .15s ease, color .15s ease, transform .12s ease;
   }
   .chip:hover{ border-color: var(--accent-dim); color: var(--ink); transform: translateY(-1px); }
 
   .avatar{
-    width: 28px; height: 28px;
-    border-radius: 8px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 600;
-    margin-top: 2px;
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; margin-top: 2px;
   }
-  .avatar.agent{
-    background: linear-gradient(155deg, var(--accent) 0%, var(--accent-dim) 100%);
-    color: #14201b;
-  }
-  .avatar.user{
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    color: var(--ink-dim);
-  }
+  .avatar.agent{ background: linear-gradient(155deg, var(--accent) 0%, var(--accent-dim) 100%); color: #14201b; }
+  .avatar.agent .bin-glyph{ width: 18px; height: 18px; }
+  .avatar.user{ background: var(--bg-raised); border: 1px solid var(--line); color: var(--ink-dim); }
 
-  .bubble-col{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 80%;
-  }
+  .bubble-col{ display: flex; flex-direction: column; gap: 6px; max-width: 80%; min-width: 0; }
   .msg-row.user .bubble-col{ align-items: flex-end; }
   .sender-name{ font-size: 11.5px; color: var(--ink-faint); padding: 0 4px; }
 
-  /* ----- Claude-style Spinner & Expandable Activity Log ----- */
+  /* ----- Icon riêng của Bin (SVG, không dùng emoji hệ thống) ----- */
+  .bin-glyph{ display: block; overflow: visible; }
+  .bin-glyph .ray{ opacity: 1; }
+  @keyframes rayChase{
+    0%, 100%{ opacity: .22; }
+    35%{ opacity: 1; }
+  }
+  @keyframes glyphBreath{
+    0%, 100%{ transform: scale(1) rotate(0deg); }
+    50%{ transform: scale(1.1) rotate(22deg); }
+  }
+  .bin-glyph.spinning{ animation: glyphBreath 3.2s ease-in-out infinite; transform-origin: 50% 50%; }
+  .bin-glyph.spinning .ray{ animation: rayChase 1.4s ease-in-out infinite; animation-delay: calc(var(--i) * -0.175s); }
+
+  /* ----- Khối suy nghĩ kiểu Claude ----- */
   .think-block{
     background: var(--bg-raised);
     border: 1px solid var(--line);
-    border-radius: 11px;
+    border-radius: 12px;
     overflow: hidden;
     width: 100%;
-    min-width: 240px;
-    transition: border-color .15s ease;
+    min-width: 250px;
+    transition: border-color .2s ease, background .2s ease;
   }
-  .think-block:hover{ border-color: var(--accent-dim); }
+  .think-block:hover, .think-block.open{ border-color: var(--accent-dim); }
 
   .think-header{
     width: 100%;
-    background: none;
-    border: none;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    background: none; border: none;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
     cursor: pointer;
     color: var(--ink-dim);
     font-family: inherit;
-    font-size: 12.5px;
     text-align: left;
   }
-  .think-header:hover{ color: var(--ink); }
-
-  @keyframes claudeSpin{
-    0%{ transform: rotate(0deg) scale(1); }
-    50%{ transform: rotate(180deg) scale(1.12); }
-    100%{ transform: rotate(360deg) scale(1); }
-  }
-  .claude-glyph{
-    color: var(--accent);
-    font-size: 14px;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .claude-glyph.spinning{ animation: claudeSpin 1.8s ease-in-out infinite; }
-
+  .think-header .bin-glyph{ width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; }
+  .think-main{ flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .think-line{ display: flex; align-items: baseline; gap: 6px; font-size: 13px; min-width: 0; }
+  .think-verb-wrap{ display: inline-flex; align-items: baseline; min-width: 0; overflow: hidden; }
   .think-verb{
     font-weight: 500;
     color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
   }
+  @keyframes shimmer{ 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+  .think-block.active .think-verb{
+    background: linear-gradient(100deg, var(--ink-dim) 30%, #fff 50%, var(--ink-dim) 70%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: shimmer 2.6s linear infinite;
+  }
+  .think-dots{ display: none; margin-left: 1px; color: var(--ink-dim); }
+  .think-block.active .think-dots{ display: inline-flex; gap: 2px; align-self: center; }
+  .think-dots i{ width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: .25; animation: dotBlink 1.2s infinite; }
+  .think-dots i:nth-child(2){ animation-delay: .2s; }
+  .think-dots i:nth-child(3){ animation-delay: .4s; }
+  @keyframes dotBlink{ 0%, 80%, 100%{ opacity: .25; } 40%{ opacity: 1; } }
+
+  .think-timer{ color: var(--ink-faint); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .think-sub{
     color: var(--ink-faint);
     font-size: 11.5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    transition: opacity .2s ease;
   }
-  .think-chevron{
-    margin-left: auto;
-    color: var(--ink-faint);
-    font-size: 11px;
-    transition: transform .18s ease;
-  }
+  .think-chevron{ color: var(--ink-faint); transition: transform .25s var(--ease); flex-shrink: 0; display: flex; }
   .think-block.open .think-chevron{ transform: rotate(90deg); }
 
   .think-drawer{
-    display: none;
-    border-top: 1px solid var(--line);
-    background: rgba(15, 13, 10, 0.55);
-    padding: 9px 12px;
-    font-size: 12px;
-    color: var(--ink-dim);
-    line-height: 1.5;
-    max-height: 210px;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .3s var(--ease);
+    border-top: 1px solid transparent;
+    background: rgba(15, 13, 10, 0.5);
+  }
+  .think-block.open .think-drawer{ grid-template-rows: 1fr; border-top-color: var(--line); }
+  .think-drawer-inner{ min-height: 0; overflow: hidden; }
+  .think-log{
+    max-height: 230px;
     overflow-y: auto;
+    padding: 10px 12px;
+    display: flex; flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
-  .think-block.open .think-drawer{
-    display: block;
-    animation: msgAppear .18s ease;
+  @keyframes rowIn{ from{ opacity: 0; transform: translateX(-6px); } to{ opacity: 1; transform: translateX(0); } }
+  .log-row{
+    position: relative;
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 5px 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-dim);
+    animation: rowIn .3s var(--ease);
   }
-  .think-log-line{
-    padding: 3px 0;
-    border-bottom: 1px dashed rgba(163, 156, 140, 0.14);
-    word-break: break-word;
+  .log-row:not(:last-child)::before{
+    content: "";
+    position: absolute;
+    left: 10px; top: 26px; bottom: -4px;
+    width: 1px;
+    background: var(--line);
   }
-  .think-log-line:last-child{ border-bottom: none; }
+  .log-ico{
+    width: 21px; height: 21px; border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--ink-faint);
+    position: relative;
+    transition: color .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .log-ico svg{ width: 11px; height: 11px; }
+  .log-row.running .log-ico{ color: var(--accent-bright); border-color: var(--accent); }
+  .log-row.running .log-ico::after{
+    content: "";
+    position: absolute; inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    border-top-color: var(--accent);
+    animation: spin .9s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .log-row.done .log-ico{ color: var(--accent); background: var(--accent-soft); border-color: var(--accent-dim); }
+  .log-row.error .log-ico{ color: var(--danger); border-color: #7a3f38; background: rgba(217,122,111,.1); }
+  .log-body{ flex: 1; min-width: 0; padding-top: 1px; word-break: break-word; }
+  .log-tag{ font-weight: 600; color: var(--ink); margin-right: 6px; }
+  .log-row.running .log-body{ color: var(--ink); }
+  .log-time{ color: var(--ink-faint); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; padding-top: 2px; }
 
+  /* ----- Bubble ----- */
   .bubble{
     padding: 12px 15px;
     border-radius: var(--radius);
@@ -455,162 +373,145 @@
     line-height: 1.62;
     white-space: pre-wrap;
     word-wrap: break-word;
+    overflow-wrap: anywhere;
   }
-  .msg-row.agent .bubble{
-    background: var(--agent-bubble);
-    border: 1px solid var(--line);
-    border-top-left-radius: 4px;
-    color: var(--ink);
-  }
-  .msg-row.user .bubble{
-    background: var(--user-bubble);
-    border-top-right-radius: 4px;
-    color: #e9f2ec;
-  }
+  .msg-row.agent .bubble{ background: var(--agent-bubble); border: 1px solid var(--line); border-top-left-radius: 4px; color: var(--ink); }
+  .msg-row.user .bubble{ background: var(--user-bubble); border-top-right-radius: 4px; color: #e9f2ec; }
   .bubble.error{ border-color: #7a3f38 !important; color: #e6a89c; }
+  @keyframes caret{ 50%{ opacity: 0; } }
+  .bubble.streaming::after{
+    content: "";
+    display: inline-block;
+    width: 7px; height: 15px;
+    margin-left: 2px;
+    vertical-align: -2px;
+    border-radius: 2px;
+    background: var(--accent);
+    animation: caret 1s steps(2) infinite;
+  }
 
   /* ----- Composer ----- */
-  .composer-wrap{ padding: 14px 32px 22px; }
+  .composer-wrap{ padding: 14px 32px calc(22px + env(safe-area-inset-bottom, 0px)); }
   .composer{
-    max-width: 740px;
-    margin: 0 auto;
+    max-width: 740px; margin: 0 auto;
     background: var(--bg-raised);
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 10px 10px 10px 18px;
-    display: flex;
-    align-items: flex-end;
-    gap: 10px;
+    display: flex; align-items: flex-end; gap: 10px;
     transition: border-color .15s ease;
   }
   .composer:focus-within{ border-color: var(--accent-dim); }
   .composer textarea{
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    resize: none;
+    flex: 1; background: none; border: none; outline: none; resize: none;
     color: var(--ink);
     font-family: inherit;
-    font-size: 14.5px;
+    font-size: 16px; /* >=16px để iOS Safari không tự zoom */
     line-height: 1.5;
     max-height: 160px;
-    padding: 8px 0;
+    padding: 6px 0;
   }
   .composer textarea::placeholder{ color: var(--ink-faint); }
   .send-btn{
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    background: var(--accent);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    color: #14201b;
-    transition: background .15s ease, opacity .15s ease;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--accent); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; color: #14201b;
+    transition: background .15s ease, opacity .15s ease, transform .1s ease;
   }
   .send-btn:hover{ background: #8fb5a4; }
+  .send-btn:active{ transform: scale(0.94); }
   .send-btn:disabled{ opacity: .35; cursor: not-allowed; background: var(--ink-faint); }
 
-  .composer-hint{
-    max-width: 740px;
-    margin: 8px auto 0;
-    text-align: center;
-    font-size: 11.5px;
-    color: var(--ink-faint);
-  }
+  .composer-hint{ max-width: 740px; margin: 8px auto 0; text-align: center; font-size: 11.5px; color: var(--ink-faint); }
   .composer-hint a{ color: var(--ink-dim); cursor: pointer; text-decoration: underline; }
 
   /* ----- Modal ----- */
   .modal-backdrop{
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(10,9,7,0.75);
-    z-index: 999;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,9,7,0.75); z-index: 999;
+    align-items: center; justify-content: center; padding: 20px;
   }
-  .modal-backdrop.show{ display: flex; }
+  .modal-backdrop.show{ display: flex; animation: msgAppear .2s ease; }
   .modal{
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 22px;
-    width: 100%;
-    max-width: 440px;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px; width: 100%; max-width: 440px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.5);
   }
-  .modal h2{ font-family: 'Fraunces', serif; font-size: 18px; margin: 0 0 6px; color: var(--ink); }
+  .modal h2{ font-family: 'Fraunces', serif; font-size: 18px; margin: 0 0 6px; }
   .modal p{ font-size: 13px; color: var(--ink-dim); line-height: 1.6; margin: 0 0 14px; }
   .modal input{
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    color: var(--ink);
-    padding: 10px 12px;
-    font-family: inherit;
-    font-size: 13.5px;
-    outline: none;
+    width: 100%; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 9px; color: var(--ink); padding: 10px 12px;
+    font-family: inherit; font-size: 16px; outline: none;
   }
   .modal input:focus{ border-color: var(--accent-dim); }
   .modal-actions{ display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
   .modal-btn{
-    padding: 9px 15px;
-    border-radius: 9px;
-    font-family: inherit;
-    font-size: 13px;
-    cursor: pointer;
-    border: 1px solid var(--line);
-    background: none;
-    color: var(--ink-dim);
+    padding: 9px 15px; border-radius: 9px; font-family: inherit; font-size: 13px;
+    cursor: pointer; border: 1px solid var(--line); background: none; color: var(--ink-dim);
   }
   .modal-btn.primary{ background: var(--accent); border-color: var(--accent); color: #14201b; font-weight: 500; }
-  .modal-status{ margin-top: 10px; font-size: 12.5px; color: var(--ink-faint); }
+  .modal-status{ margin-top: 10px; font-size: 12.5px; color: var(--ink-faint); min-height: 1em; }
 
   /* ----- Mobile ----- */
   .sidebar-toggle{ display: none; background: none; border: none; color: var(--ink-dim); cursor: pointer; padding: 6px; }
   @media (max-width: 780px){
     .app{ grid-template-columns: 1fr; }
     .sidebar{
-      position: fixed;
-      top: 0; left: 0;
-      height: 100dvh;
-      width: 278px;
-      z-index: 30;
+      position: fixed; top: 0; left: 0;
+      height: 100dvh; width: 278px; z-index: 30;
       transform: translateX(-100%);
-      transition: transform .2s ease;
+      transition: transform .25s var(--ease);
     }
     .sidebar.open{ transform: translateX(0); }
     .sidebar-backdrop{
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 20;
+      display: block; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 20;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
     }
-    .sidebar-backdrop.show{ display: block; }
+    .sidebar-backdrop.show{ opacity: 1; pointer-events: auto; }
     .sidebar-toggle{ display: flex; }
-    .chat-topbar{ padding: 14px 18px; }
+    .chat-topbar{ padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 14px; }
     .messages-inner, .welcome, .composer-hint{ padding-left: 18px; padding-right: 18px; }
     .composer{ margin-left: 18px; margin-right: 18px; padding-left: 14px; }
-    .composer-wrap{ padding: 12px 0 18px; }
-    .bubble-col{ max-width: 88%; }
+    .composer-wrap{ padding: 12px 0 calc(18px + env(safe-area-inset-bottom, 0px)); }
+    .bubble-col{ max-width: 92%; }
+    .welcome h1{ font-size: 27px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   }
 </style>
 </head>
 <body>
+
+<!-- Icon riêng của Bin: 8 tia, tia ngắn/dài xen kẽ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="bin-rays" viewBox="0 0 24 24">
+      <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line class="ray" style="--i:0" x1="12" y1="2.5" x2="12" y2="8.5" transform="rotate(0 12 12)"/>
+        <line class="ray" style="--i:1" x1="12" y1="4.5" x2="12" y2="8.5" transform="rotate(45 12 12)"/>
+        <line class="ray" style="--i:2" x1="12" y1="2.5" x2="12" y2="8.5" transform="rotate(90 12 12)"/>
+        <line class="ray" style="--i:3" x1="12" y1="4.5" x2="12" y2="8.5" transform="rotate(135 12 12)"/>
+        <line class="ray" style="--i:4" x1="12" y1="2.5" x2="12" y2="8.5" transform="rotate(180 12 12)"/>
+        <line class="ray" style="--i:5" x1="12" y1="4.5" x2="12" y2="8.5" transform="rotate(225 12 12)"/>
+        <line class="ray" style="--i:6" x1="12" y1="2.5" x2="12" y2="8.5" transform="rotate(270 12 12)"/>
+        <line class="ray" style="--i:7" x1="12" y1="4.5" x2="12" y2="8.5" transform="rotate(315 12 12)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="app">
   <div class="sidebar-backdrop" id="backdrop"></div>
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="mark"></div>
+      <div class="mark"><svg class="bin-glyph" viewBox="0 0 24 24"><use href="#bin-rays"/></svg></div>
       <div class="brand">Đàm thoại</div>
       <span class="status-badge" id="statusBadge" title="Trạng thái kết nối"></span>
     </div>
@@ -632,7 +533,7 @@
         <button class="mode-pill" data-mode="smart">Thông minh</button>
         <button class="mode-pill" data-mode="deep">Nghĩ sâu</button>
       </div>
-      <div class="mode-desc" id="modeDesc">Phản hồi nhanh, gọn, 1 bước công cụ khi cần.</div>
+      <div class="mode-desc" id="modeDesc">Phản hồi nhanh, gọn, tối đa 1 bước công cụ khi cần.</div>
     </div>
 
     <div class="history-label">Lịch sử</div>
@@ -685,7 +586,7 @@
   <div class="modal">
     <h2>Kết nối mô hình</h2>
     <p>Dán URL công khai từ Gradio (dạng <code>https://xxxxxxxx.gradio.live</code>). Hệ thống sẽ kiểm tra trạng thái nạp model và ước lượng thời gian chờ nếu model đang khởi động.</p>
-    <input type="text" id="apiUrlInput" placeholder="https://xxxxxxxxxxxx.gradio.live" autocomplete="off">
+    <input type="text" id="apiUrlInput" placeholder="https://xxxxxxxxxxxx.gradio.live" autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="modal-status" id="modalStatus"></div>
     <div class="modal-actions">
       <button class="modal-btn" id="modalCancel">Đóng</button>
@@ -694,15 +595,9 @@
   </div>
 </div>
 
-<script type="module">
-  import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
-  window.__GradioClient = Client;
-</script>
-
 <script>
 (function(){
-  // 191 từ (185 hiện hành + 6 lưu trữ) từ The Spinner Verbs Dictionary
-    const SPINNER_VERBS = [
+  const SPINNER_VERBS = [
     "hoàn tất cho xong", "hành động hóa", "hiện thực hóa", "vẽ kiến trúc", "nướng chín", "tỏa hào quang",
     "phiêu jazz", "ngơ ngác toàn tập", "cuộn sóng", "chần nước sôi", "chém gió hàn lâm", "nhún nhảy theo nhịp",
     "bận rộn vô bổ", "chạm nhẹ cái mũi", "tự kéo dây giày", "ủ men", "đào sâu xuống đáy", "tính nhẩm lạnh lùng",
@@ -738,23 +633,45 @@
     "làm trò phù thủy", "thuần phục đám rối", "cạo vỏ chanh tạo hương", "ziczac đổi hướng liên tục"
   ];
 
+  // Nhịp đổi câu vui: chậm, ngẫu nhiên 4.2–6.4 giây (giống Claude)
+  const VERB_MIN_MS = 4200;
+  const VERB_JITTER_MS = 2200;
+
   const MODE_META = {
-    normal: {
-      label: "Bình thường",
-      badge: "⚡ Bình thường",
-      desc: "Phản hồi nhanh, gọn, tối đa 1 bước công cụ khi cần."
-    },
-    smart: {
-      label: "Thông minh",
-      badge: "🧠 Thông minh",
-      desc: "Phân tích kỹ hơn, tối đa 2 bước công cụ, ngữ cảnh rộng hơn."
-    },
-    deep: {
-      label: "Nghĩ sâu",
-      badge: "🔮 Nghĩ sâu",
-      desc: "Suy luận đa chiều nhất, dò/soi kỹ hơn, tối đa 4 bước công cụ."
-    }
+    normal: { label: "Bình thường", badge: "⚡ Bình thường", desc: "Phản hồi nhanh, gọn, tối đa 1 bước công cụ khi cần." },
+    smart:  { label: "Thông minh",  badge: "🧠 Thông minh",  desc: "Phân tích kỹ hơn, tối đa 2 bước công cụ, ngữ cảnh rộng hơn." },
+    deep:   { label: "Nghĩ sâu",    badge: "🔮 Nghĩ sâu",    desc: "Suy luận đa chiều nhất, dò/soi kỹ hơn, tối đa 4 bước công cụ." }
   };
+
+  // Icon + nhãn tiếng Việt cho từng loại bước (SVG nét mảnh, không dùng emoji)
+  const TYPE_META = {
+    net:      { tag: "Kết nối",    icon: '<path d="M5 12h14M13 6l6 6-6 6"/>' },
+    think:    { tag: "Suy luận",   icon: '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>' },
+    search:   { tag: "Tìm kiếm",   icon: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/>' },
+    fetch:    { tag: "Tải trang",  icon: '<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>' },
+    probe:    { tag: "Dò đường dẫn", icon: '<path d="M4 7h16M4 12h10M4 17h6"/>' },
+    security: { tag: "Bảo mật",    icon: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>' },
+    code:     { tag: "Phân tích mã", icon: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>' },
+    tool:     { tag: "Công cụ",    icon: '<path d="M14 6a4 4 0 005 5l-9 9a2 2 0 01-3-3l9-9z"/>' },
+    write:    { tag: "Viết",       icon: '<path d="M4 20h4L19 9l-4-4L4 16z"/>' },
+    error:    { tag: "Lỗi",        icon: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/>' }
+  };
+  function resolveType(raw){
+    const t = String(raw || '').toLowerCase();
+    if(TYPE_META[t]) return t;
+    if(/search|tìm/.test(t)) return 'search';
+    if(/fetch|http|get|tải|crawl|scrape/.test(t)) return 'fetch';
+    if(/probe|path|scan|dò|dir/.test(t)) return 'probe';
+    if(/sec|header|bảo/.test(t)) return 'security';
+    if(/html|css|js|code|parse|mã/.test(t)) return 'code';
+    if(/tool|công cụ|call/.test(t)) return 'tool';
+    if(/err|lỗi|fail/.test(t)) return 'error';
+    if(/write|answer|viết/.test(t)) return 'write';
+    return 'think';
+  }
+  function iconSvg(type){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + TYPE_META[type].icon + '</svg>';
+  }
 
   const STORAGE_KEY = 'dam-thoai-chats-v2';
   const API_URL_KEY = 'dam-thoai-api-url';
@@ -764,84 +681,75 @@
   let activeChatId = null;
   let apiUrl = '';
   let gradioClient = null;
-  let connectionStatus = 'offline';
+  let clientLibPromise = null;
   let currentMode = 'normal';
   let isBusy = false;
 
-  const historyList = document.getElementById('historyList');
-  const messagesArea = document.getElementById('messagesArea');
-  const messagesInner = document.getElementById('messagesInner');
-  const welcomeScreen = document.getElementById('welcomeScreen');
-  const promptChips = document.getElementById('promptChips');
-  const composerInput = document.getElementById('composerInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const newChatBtn = document.getElementById('newChatBtn');
-  const chatTitle = document.getElementById('chatTitle');
-  const chatSubtitle = document.getElementById('chatSubtitle');
-  const topbarModeBadge = document.getElementById('topbarModeBadge');
-  const modeDesc = document.getElementById('modeDesc');
-  const sidebar = document.getElementById('sidebar');
-  const sidebarToggle = document.getElementById('sidebarToggle');
-  const backdrop = document.getElementById('backdrop');
-  const statusBadge = document.getElementById('statusBadge');
-  const footerDot = document.getElementById('footerDot');
-  const footerText = document.getElementById('footerText');
-  const settingsBtn = document.getElementById('settingsBtn');
-  const settingsModal = document.getElementById('settingsModal');
-  const apiUrlInput = document.getElementById('apiUrlInput');
-  const modalStatus = document.getElementById('modalStatus');
-  const modalCancel = document.getElementById('modalCancel');
-  const modalSave = document.getElementById('modalSave');
-  const hintSettingsLink = document.getElementById('hintSettingsLink');
+  const $ = (id) => document.getElementById(id);
+  const historyList = $('historyList');
+  const messagesArea = $('messagesArea');
+  const messagesInner = $('messagesInner');
+  const welcomeScreen = $('welcomeScreen');
+  const promptChips = $('promptChips');
+  const composerInput = $('composerInput');
+  const sendBtn = $('sendBtn');
+  const newChatBtn = $('newChatBtn');
+  const chatTitle = $('chatTitle');
+  const chatSubtitle = $('chatSubtitle');
+  const topbarModeBadge = $('topbarModeBadge');
+  const modeDesc = $('modeDesc');
+  const sidebar = $('sidebar');
+  const sidebarToggle = $('sidebarToggle');
+  const backdrop = $('backdrop');
+  const statusBadge = $('statusBadge');
+  const footerDot = $('footerDot');
+  const footerText = $('footerText');
+  const settingsBtn = $('settingsBtn');
+  const settingsModal = $('settingsModal');
+  const apiUrlInput = $('apiUrlInput');
+  const modalStatus = $('modalStatus');
+  const modalCancel = $('modalCancel');
+  const modalSave = $('modalSave');
+  const hintSettingsLink = $('hintSettingsLink');
+
+  // Nạp thư viện Gradio theo kiểu động để luôn sẵn sàng trước khi kết nối
+  function getClientLib(){
+    if(!clientLibPromise){
+      clientLibPromise = import("https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js").then(m => m.Client);
+    }
+    return clientLibPromise;
+  }
 
   function pickVerb(exclude){
-    if(SPINNER_VERBS.length <= 1) return SPINNER_VERBS[0] || "thinking";
-    let candidate = SPINNER_VERBS[Math.floor(Math.random() * SPINNER_VERBS.length)];
-    if(candidate === exclude){
-      candidate = SPINNER_VERBS[(SPINNER_VERBS.indexOf(candidate) + 1) % SPINNER_VERBS.length];
-    }
-    return candidate;
+    if(SPINNER_VERBS.length <= 1) return SPINNER_VERBS[0] || "đang suy nghĩ";
+    let c;
+    do{ c = SPINNER_VERBS[Math.floor(Math.random() * SPINNER_VERBS.length)]; }while(c === exclude);
+    return c;
   }
+  function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 
   function loadChats(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      chats = raw ? JSON.parse(raw) : [];
-    }catch(e){ chats = []; }
+    try{ const raw = localStorage.getItem(STORAGE_KEY); chats = raw ? JSON.parse(raw) : []; }
+    catch(e){ chats = []; }
   }
-  function saveChats(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); }catch(e){}
-  }
-  function uid(){
-    return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-  }
+  function saveChats(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); }catch(e){} }
+  function uid(){ return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
   function applyModeUI(mode){
     currentMode = MODE_META[mode] ? mode : 'normal';
     try{ localStorage.setItem(MODE_KEY, currentMode); }catch(e){}
-    document.querySelectorAll('.mode-pill').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.mode === currentMode);
-    });
+    document.querySelectorAll('.mode-pill').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentMode));
     const meta = MODE_META[currentMode];
     topbarModeBadge.textContent = meta.badge;
     modeDesc.textContent = meta.desc;
   }
-
-  document.querySelectorAll('.mode-pill').forEach(btn => {
-    btn.addEventListener('click', () => applyModeUI(btn.dataset.mode));
-  });
+  document.querySelectorAll('.mode-pill').forEach(btn => btn.addEventListener('click', () => applyModeUI(btn.dataset.mode)));
 
   function setStatus(status, extraText){
-    connectionStatus = status;
     statusBadge.className = 'status-badge ' + (status === 'online' ? 'online' : status === 'connecting' ? '' : 'offline');
     footerDot.className = 'dot' + (status === 'online' ? '' : ' offline');
-    if(extraText){
-      footerText.textContent = extraText;
-    }else{
-      footerText.textContent = status === 'online' ? 'Đã kết nối mô hình'
-        : status === 'connecting' ? 'Đang kết nối...'
-        : 'Chưa kết nối mô hình';
-    }
+    footerText.textContent = extraText || (status === 'online' ? 'Đã kết nối mô hình'
+      : status === 'connecting' ? 'Đang kết nối...' : 'Chưa kết nối mô hình');
     hintSettingsLink.textContent = status === 'online'
       ? (extraText || 'đã kết nối mô hình')
       : 'chưa kết nối mô hình — bấm để kết nối';
@@ -869,13 +777,12 @@
     setStatus('connecting', 'Đang kết nối...');
     if(!silent) modalStatus.textContent = 'Đang kết nối tới Gradio...';
     try{
-      gradioClient = await window.__GradioClient.connect(url);
+      const Client = await getClientLib();
+      gradioClient = await Client.connect(url);
       apiUrl = url;
       localStorage.setItem(API_URL_KEY, url);
       await checkBackendReadiness();
-      if(!modalStatus.textContent){
-        modalStatus.textContent = 'Kết nối thành công!';
-      }
+      if(!modalStatus.textContent) modalStatus.textContent = 'Kết nối thành công!';
       return true;
     }catch(err){
       console.error('Gradio connect error:', err);
@@ -923,35 +830,22 @@
 
   function splitEventsAndAnswer(raw){
     const logs = [];
-    let answer = "";
-    const lines = (raw || "").split("\n");
-    for(const line of lines){
+    const keep = [];
+    for(const line of (raw || "").split("\n")){
       if(line.startsWith("[[BIN_EVENT]]")){
-        try{
-          const ev = JSON.parse(line.slice("[[BIN_EVENT]]".length));
-          logs.push(ev);
-        }catch(e){}
+        try{ logs.push(JSON.parse(line.slice("[[BIN_EVENT]]".length))); }catch(e){}
       }else{
-        answer += (answer ? "\n" : "") + line;
+        keep.push(line);
       }
     }
-    // Khôi phục lại ký tự xuống dòng gốc cho answer
-    const rawWithoutEvents = (raw || "")
-      .split("\n")
-      .filter(l => !l.startsWith("[[BIN_EVENT]]"))
-      .join("\n");
-    return { logs, answer: rawWithoutEvents };
+    return { logs, answer: keep.join("\n") };
   }
 
   async function streamFromModel(message, historyPairs, onUpdate){
     if(!gradioClient) throw new Error('Chưa kết nối mô hình');
 
     if(typeof gradioClient.submit === 'function'){
-      const job = gradioClient.submit("/chat", {
-        message: message,
-        history: historyPairs,
-        mode: currentMode
-      });
+      const job = gradioClient.submit("/chat", { message, history: historyPairs, mode: currentMode });
       let latest = "";
       for await (const msg of job){
         if(msg?.type === "data" && Array.isArray(msg.data)){
@@ -962,18 +856,14 @@
       return latest;
     }
 
-    const res = await gradioClient.predict("/chat", {
-      message: message,
-      history: historyPairs,
-      mode: currentMode
-    });
+    const res = await gradioClient.predict("/chat", { message, history: historyPairs, mode: currentMode });
     const d = Array.isArray(res?.data) ? res.data[0] : res?.data;
     const text = typeof d === "string" ? d : JSON.stringify(d ?? "");
     onUpdate(text);
     return text;
   }
 
-  // ---------- Rendering ----------
+  // ---------- Render ----------
   function renderHistory(){
     historyList.innerHTML = '';
     if(chats.length === 0){
@@ -995,11 +885,9 @@
 
       const delBtn = document.createElement('button');
       delBtn.className = 'delete-btn';
+      delBtn.setAttribute('aria-label', 'Xóa cuộc trò chuyện');
       delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6h16z"/></svg>';
-      delBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteChat(chat.id);
-      });
+      delBtn.addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chat.id); });
 
       item.appendChild(title);
       item.appendChild(delBtn);
@@ -1008,91 +896,205 @@
     }
   }
 
-  function createThinkBlock({ active, logs, initialVerb }){
+  function glyphEl(spinning){
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'bin-glyph' + (spinning ? ' spinning' : ''));
+    svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS(NS, 'use');
+    use.setAttribute('href', '#bin-rays');
+    svg.appendChild(use);
+    return svg;
+  }
+
+  function fmtLive(ms){
+    const s = Math.floor(ms / 1000);
+    return s < 60 ? s + 's' : Math.floor(s / 60) + 'p ' + String(s % 60).padStart(2, '0') + 's';
+  }
+  function fmtDone(ms){
+    const s = Math.max(1, Math.round(ms / 1000));
+    return s < 60 ? s + ' giây' : Math.floor(s / 60) + ' phút ' + (s % 60) + ' giây';
+  }
+  function fmtOffset(ms){ return '+' + (Math.max(0, ms) / 1000).toFixed(1) + 's'; }
+
+  /* Khối suy nghĩ kiểu Claude:
+     - Header: icon SVG riêng + câu vui đổi chậm (có hiệu ứng) + đồng hồ + bước hiện tại
+     - Drawer: từng bước hiện ra theo thời gian thực, có trạng thái đang chạy / xong */
+  function createThinkBlock({ active, logs = [], durationMs = 0, initialVerb }){
     const block = document.createElement('div');
-    block.className = 'think-block';
-    let userToggled = false;
-    let currentVerb = initialVerb || pickVerb("");
+    block.className = 'think-block' + (active ? ' active' : '');
+
+    let verb = initialVerb || pickVerb('');
+    let verbTimer = null, clockTimer = null;
+    const t0 = performance.now();
+    let renderedCount = 0;
+    let rows = [];
 
     const header = document.createElement('button');
     header.type = 'button';
     header.className = 'think-header';
 
-    const glyph = document.createElement('span');
-    glyph.className = 'claude-glyph' + (active ? ' spinning' : '');
-    glyph.textContent = '✳';
+    const glyph = glyphEl(active);
 
+    const main = document.createElement('div');
+    main.className = 'think-main';
+
+    const line = document.createElement('div');
+    line.className = 'think-line';
+    const verbWrap = document.createElement('span');
+    verbWrap.className = 'think-verb-wrap';
     const verbEl = document.createElement('span');
     verbEl.className = 'think-verb';
-    verbEl.textContent = currentVerb;
+    verbEl.textContent = capitalize(verb);
+    const dots = document.createElement('span');
+    dots.className = 'think-dots';
+    dots.innerHTML = '<i></i><i></i><i></i>';
+    verbWrap.appendChild(verbEl);
+    verbWrap.appendChild(dots);
+    const timerEl = document.createElement('span');
+    timerEl.className = 'think-timer';
+    line.appendChild(verbWrap);
+    line.appendChild(timerEl);
 
-    const subEl = document.createElement('span');
+    const subEl = document.createElement('div');
     subEl.className = 'think-sub';
-    subEl.textContent = active ? 'Đang làm việc...' : 'Chi tiết hoạt động';
 
-    const chevEl = document.createElement('span');
-    chevEl.className = 'think-chevron';
-    chevEl.textContent = '▸';
+    main.appendChild(line);
+    main.appendChild(subEl);
+
+    const chev = document.createElement('span');
+    chev.className = 'think-chevron';
+    chev.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
 
     header.appendChild(glyph);
-    header.appendChild(verbEl);
-    header.appendChild(subEl);
-    header.appendChild(chevEl);
+    header.appendChild(main);
+    header.appendChild(chev);
 
     const drawer = document.createElement('div');
     drawer.className = 'think-drawer';
+    const drawerInner = document.createElement('div');
+    drawerInner.className = 'think-drawer-inner';
+    const logEl = document.createElement('div');
+    logEl.className = 'think-log';
+    drawerInner.appendChild(logEl);
+    drawer.appendChild(drawerInner);
 
     header.addEventListener('click', () => {
-      userToggled = true;
       block.classList.toggle('open');
+      if(block.classList.contains('open')) setTimeout(() => { logEl.scrollTop = logEl.scrollHeight; }, 320);
     });
 
-    function sync(nextActive, nextLogs){
-      glyph.classList.toggle('spinning', !!nextActive);
-      const list = Array.isArray(nextLogs) ? nextLogs : [];
-      drawer.innerHTML = '';
-      if(list.length === 0){
-        const d = document.createElement('div');
-        d.className = 'think-log-line';
-        d.textContent = nextActive ? 'Đang khởi tạo luồng suy luận...' : 'Trả lời trực tiếp không cần công cụ ngoài.';
-        drawer.appendChild(d);
-        subEl.textContent = nextActive ? 'Đang suy nghĩ' : 'Trả lời trực tiếp';
-      }else{
-        for(const item of list){
-          const row = document.createElement('div');
-          row.className = 'think-log-line';
-          row.textContent = `[${item.type || 'step'}] ${item.detail || ''}`;
-          drawer.appendChild(row);
-        }
+    function swapVerb(){
+      if(!block.classList.contains('active')) return;
+      const next = pickVerb(verb);
+      verb = next;
+      const out = verbEl.animate(
+        [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-6px)' }],
+        { duration: 260, easing: 'ease-in', fill: 'forwards' }
+      );
+      out.onfinish = () => {
+        verbEl.textContent = capitalize(next);
+        out.cancel();
+        verbEl.animate(
+          [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 380, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+      };
+    }
+    function scheduleVerb(){
+      verbTimer = setTimeout(() => { swapVerb(); scheduleVerb(); }, VERB_MIN_MS + Math.random() * VERB_JITTER_MS);
+    }
+
+    function addRow(item, done){
+      const type = resolveType(item.type);
+      const row = document.createElement('div');
+      row.className = 'log-row ' + (type === 'error' ? 'error ' : '') + (done ? 'done' : 'running');
+
+      const ico = document.createElement('div');
+      ico.className = 'log-ico';
+      ico.innerHTML = iconSvg(type);
+
+      const body = document.createElement('div');
+      body.className = 'log-body';
+      const tag = document.createElement('span');
+      tag.className = 'log-tag';
+      tag.textContent = TYPE_META[type].tag;
+      body.appendChild(tag);
+      body.appendChild(document.createTextNode(item.detail || ''));
+
+      const time = document.createElement('div');
+      time.className = 'log-time';
+      time.textContent = typeof item.t === 'number' ? fmtOffset(item.t) : '';
+
+      row.appendChild(ico);
+      row.appendChild(body);
+      row.appendChild(time);
+
+      const nearBottom = logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 40;
+      logEl.appendChild(row);
+      rows.push(row);
+      if(nearBottom) logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function setSub(text){
+      if(subEl.textContent !== text) subEl.textContent = text;
+    }
+
+    function sync(nextActive, list, subOverride){
+      list = Array.isArray(list) ? list : [];
+      for(let i = renderedCount; i < list.length; i++){
+        addRow(list[i], !nextActive);
+      }
+      renderedCount = list.length;
+      rows.forEach((r, i) => {
+        const isLastRunning = nextActive && i === rows.length - 1;
+        if(r.classList.contains('error')) { r.classList.remove('running'); return; }
+        r.classList.toggle('running', isLastRunning);
+        r.classList.toggle('done', !isLastRunning);
+      });
+      if(nextActive){
         const last = list[list.length - 1];
-        subEl.textContent = last.detail || '';
-      }
-      if(!nextActive){
-        verbEl.textContent = `${currentVerb} · xong`;
-      }
-      if(userToggled){
-        // Giữ nguyên trạng thái mở/đóng do người dùng tự bấm
+        setSub(subOverride || (last && last.detail) || 'Đang khởi tạo luồng suy luận…');
       }
     }
 
-    function rotateVerb(){
-      currentVerb = pickVerb(currentVerb);
-      verbEl.textContent = currentVerb;
+    function finish(list, ms){
+      clearTimeout(verbTimer); clearInterval(clockTimer);
+      sync(false, list);
+      block.classList.remove('active');
+      glyph.classList.remove('spinning');
+      verbEl.getAnimations().forEach(a => a.cancel());
+      verbEl.textContent = 'Đã suy nghĩ';
+      const total = ms || ((list && list.length && typeof list[list.length-1].t === 'number') ? list[list.length-1].t : 0);
+      timerEl.textContent = total > 0 ? fmtDone(total) : '';
+      const n = list ? list.length : 0;
+      setSub(n > 0 ? n + ' bước · bấm để xem chi tiết' : 'Trả lời trực tiếp');
     }
 
-    sync(active, logs);
     block.appendChild(header);
     block.appendChild(drawer);
-    return { el: block, sync, rotateVerb };
+
+    if(active){
+      timerEl.textContent = '0s';
+      clockTimer = setInterval(() => { timerEl.textContent = fmtLive(performance.now() - t0); }, 250);
+      scheduleVerb();
+      sync(true, logs);
+    }else{
+      finish(logs, durationMs);
+    }
+
+    return { el: block, sync, finish };
   }
 
-  function buildMessageRow(role, text, isError, logs){
+  function buildMessageRow(role, text, isError, logs, durationMs){
     const row = document.createElement('div');
     row.className = 'msg-row ' + role;
 
     const avatar = document.createElement('div');
     avatar.className = 'avatar ' + role;
-    avatar.textContent = role === 'agent' ? '✦' : 'B';
+    if(role === 'agent') avatar.appendChild(glyphEl(false));
+    else avatar.textContent = 'B';
 
     const col = document.createElement('div');
     col.className = 'bubble-col';
@@ -1103,8 +1105,7 @@
     col.appendChild(name);
 
     if(role === 'agent' && Array.isArray(logs) && logs.length > 0){
-      const tb = createThinkBlock({ active: false, logs, initialVerb: pickVerb("") });
-      col.appendChild(tb.el);
+      col.appendChild(createThinkBlock({ active: false, logs, durationMs }).el);
     }
 
     const bubble = document.createElement('div');
@@ -1126,28 +1127,27 @@
     }
     welcomeScreen.style.display = 'none';
     for(const msg of chat.messages){
-      messagesInner.appendChild(buildMessageRow(msg.role, msg.text, !!msg.isError, msg.logs));
+      messagesInner.appendChild(buildMessageRow(msg.role, msg.text, !!msg.isError, msg.logs, msg.durationMs));
     }
     scrollToBottom();
   }
 
   function scrollToBottom(){
-    requestAnimationFrame(() => {
-      messagesArea.scrollTop = messagesArea.scrollHeight;
-    });
+    requestAnimationFrame(() => { messagesArea.scrollTop = messagesArea.scrollHeight; });
+  }
+  // Chỉ tự cuộn khi người dùng đang ở gần đáy, để đọc lại phía trên không bị giật
+  function scrollIfNearBottom(){
+    const gap = messagesArea.scrollHeight - messagesArea.scrollTop - messagesArea.clientHeight;
+    if(gap < 160) scrollToBottom();
   }
 
-  function getActiveChat(){
-    return chats.find(c => c.id === activeChatId) || null;
-  }
+  function getActiveChat(){ return chats.find(c => c.id === activeChatId) || null; }
 
   function openChat(id){
     activeChatId = id;
     const chat = getActiveChat();
     chatTitle.textContent = chat ? (chat.title || 'Cuộc trò chuyện mới') : 'Cuộc trò chuyện mới';
-    chatSubtitle.textContent = chat && chat.messages.length
-      ? chat.messages.length + ' tin nhắn'
-      : 'Bắt đầu bằng một câu hỏi bất kỳ';
+    chatSubtitle.textContent = chat && chat.messages.length ? chat.messages.length + ' tin nhắn' : 'Bắt đầu bằng một câu hỏi bất kỳ';
     renderHistory();
     renderMessages();
     closeSidebarOnMobile();
@@ -1166,8 +1166,7 @@
     saveChats();
     if(activeChatId === id){
       if(chats.length > 0){
-        const mostRecent = [...chats].sort((a,b) => b.updatedAt - a.updatedAt)[0];
-        openChat(mostRecent.id);
+        openChat([...chats].sort((a,b) => b.updatedAt - a.updatedAt)[0].id);
       }else{
         activeChatId = null;
         chatTitle.textContent = 'Cuộc trò chuyện mới';
@@ -1223,12 +1222,11 @@
       return;
     }
 
-    // Tạo hàng phản hồi đang stream + spinner động kiểu Claude
     const row = document.createElement('div');
     row.className = 'msg-row agent';
     const avatar = document.createElement('div');
     avatar.className = 'avatar agent';
-    avatar.textContent = '✦';
+    avatar.appendChild(glyphEl(false));
     const col = document.createElement('div');
     col.className = 'bubble-col';
     const name = document.createElement('div');
@@ -1236,12 +1234,18 @@
     name.textContent = 'Bin';
     col.appendChild(name);
 
-    const thinkCtrl = createThinkBlock({ active: true, logs: [], initialVerb: pickVerb("") });
-    col.appendChild(thinkCtrl.el);
+    // Bước đầu là thật: client vừa gửi yêu cầu đi
+    const netEv = { type: 'net', detail: 'Gửi yêu cầu tới mô hình · chế độ ' + MODE_META[currentMode].label, t: 0 };
+    const t0 = performance.now();
+    const seenT = [];
+    let finalLogs = [netEv];
+    let finalAnswer = "";
+
+    const think = createThinkBlock({ active: true, logs: finalLogs });
+    col.appendChild(think.el);
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.textContent = '';
     bubble.style.display = 'none';
     col.appendChild(bubble);
 
@@ -1250,28 +1254,29 @@
     messagesInner.appendChild(row);
     scrollToBottom();
 
-    const verbTimer = setInterval(() => {
-      thinkCtrl.rotateVerb();
-    }, 1450);
-
-    let finalLogs = [];
-    let finalAnswer = "";
-
     try{
       await streamFromModel(text, historyPairs, (rawStream) => {
         const { logs, answer } = splitEventsAndAnswer(rawStream);
-        finalLogs = logs;
+        // Gắn mốc thời gian lúc mỗi bước xuất hiện lần đầu
+        logs.forEach((l, i) => {
+          if(seenT[i] === undefined) seenT[i] = Math.round(performance.now() - t0);
+          l.t = seenT[i];
+        });
+        finalLogs = [netEv, ...logs];
         finalAnswer = answer;
-        thinkCtrl.sync(true, logs);
-        if(answer && answer.trim().length > 0){
+        const streaming = answer.trim().length > 0;
+        think.sync(true, finalLogs, streaming ? 'Đang viết câu trả lời…' : '');
+        if(streaming){
           bubble.style.display = 'block';
+          bubble.classList.add('streaming');
           bubble.textContent = answer;
         }
-        scrollToBottom();
+        scrollIfNearBottom();
       });
 
-      clearInterval(verbTimer);
-      thinkCtrl.sync(false, finalLogs);
+      const durationMs = Math.round(performance.now() - t0);
+      think.finish(finalLogs, durationMs);
+      bubble.classList.remove('streaming');
 
       if(!finalAnswer || !finalAnswer.trim()){
         finalAnswer = '(Không nhận được nội dung văn bản từ mô hình)';
@@ -1279,26 +1284,29 @@
       bubble.style.display = 'block';
       bubble.textContent = finalAnswer;
 
-      chat.messages.push({ role: 'agent', text: finalAnswer, logs: finalLogs });
+      chat.messages.push({ role: 'agent', text: finalAnswer, logs: finalLogs, durationMs });
       chat.updatedAt = Date.now();
       saveChats();
       chatSubtitle.textContent = chat.messages.length + ' tin nhắn';
       renderHistory();
-      scrollToBottom();
+      scrollIfNearBottom();
     }catch(err){
-      clearInterval(verbTimer);
       console.error('streamFromModel error:', err);
-      thinkCtrl.sync(false, finalLogs);
-      const errText = 'Lỗi khi gọi mô hình: ' + (err && err.message ? err.message : 'không rõ nguyên nhân');
+      const msg = err && err.message ? err.message : 'không rõ nguyên nhân';
+      const durationMs = Math.round(performance.now() - t0);
+      finalLogs = [...finalLogs, { type: 'error', detail: msg, t: durationMs }];
+      think.finish(finalLogs, durationMs);
+      const errText = 'Lỗi khi gọi mô hình: ' + msg;
+      bubble.classList.remove('streaming');
       bubble.style.display = 'block';
       bubble.classList.add('error');
       bubble.textContent = errText;
 
-      chat.messages.push({ role: 'agent', text: errText, isError: true, logs: finalLogs });
+      chat.messages.push({ role: 'agent', text: errText, isError: true, logs: finalLogs, durationMs });
       chat.updatedAt = Date.now();
       saveChats();
       renderHistory();
-      scrollToBottom();
+      scrollIfNearBottom();
     }finally{
       isBusy = false;
     }
@@ -1320,17 +1328,13 @@
     autoResize();
     sendBtn.disabled = composerInput.value.trim().length === 0;
   });
-
   composerInput.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter' && !e.shiftKey){
+    if(e.key === 'Enter' && !e.shiftKey && !e.isComposing){
       e.preventDefault();
       if(composerInput.value.trim() && !isBusy) submitComposer();
     }
   });
-
-  sendBtn.addEventListener('click', () => {
-    if(!isBusy) submitComposer();
-  });
+  sendBtn.addEventListener('click', () => { if(!isBusy) submitComposer(); });
 
   function submitComposer(){
     const text = composerInput.value;
@@ -1340,38 +1344,23 @@
     sendMessage(text);
   }
 
-  promptChips.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => useChip(chip.dataset.prompt));
-  });
-
+  promptChips.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => useChip(chip.dataset.prompt)));
   newChatBtn.addEventListener('click', startNewChat);
 
-  function openSidebarOnMobile(){
-    sidebar.classList.add('open');
-    backdrop.classList.add('show');
-  }
-  function closeSidebarOnMobile(){
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('show');
-  }
+  function openSidebarOnMobile(){ sidebar.classList.add('open'); backdrop.classList.add('show'); }
+  function closeSidebarOnMobile(){ sidebar.classList.remove('open'); backdrop.classList.remove('show'); }
   sidebarToggle.addEventListener('click', openSidebarOnMobile);
   backdrop.addEventListener('click', closeSidebarOnMobile);
 
-  // Init
+  // Khởi tạo
   loadChats();
-  const savedMode = localStorage.getItem(MODE_KEY) || 'normal';
-  applyModeUI(savedMode);
+  applyModeUI(localStorage.getItem(MODE_KEY) || 'normal');
 
   if(chats.length > 0){
-    const mostRecent = [...chats].sort((a,b) => b.updatedAt - a.updatedAt)[0];
-    activeChatId = mostRecent.id;
+    activeChatId = [...chats].sort((a,b) => b.updatedAt - a.updatedAt)[0].id;
   }
   renderHistory();
-  if(activeChatId){
-    openChat(activeChatId);
-  }else{
-    renderMessages();
-  }
+  if(activeChatId) openChat(activeChatId); else renderMessages();
   setStatus('offline');
 
   const savedUrl = localStorage.getItem(API_URL_KEY);
